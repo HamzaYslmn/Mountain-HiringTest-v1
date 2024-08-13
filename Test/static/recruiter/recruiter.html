@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR - A.I. 🌌</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/static/styles.css">
+    <link id="favicon" rel="icon" type="image/x-icon" href="/static/icons/favicon.ico">
+    <link rel="manifest" href="/static/recruiter/manifest.json">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <meta name="assistant" content="asst_A5hx4UnLiJfPj0MSV64hplK1">
+    <meta name="countdown" content="1200">
+    <meta name="username" content="Hamza"> <!-- From API -->
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h3>HR - A.I. 🌌</h3>
+            <div class="switch-container">
+                <i class="fa-solid fa-comments"></i>
+                <label class="switch">
+                    <input type="checkbox" id="voice-toggle" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <div id="countdown-clock" style="display: none;">20:00</div>
+        </div>
+        <div class="chat-body" id="chat-body">
+            <!-- Chat messages will go here -->
+        </div>
+        <div class="chat-footer">
+            <button class="chat-btn" id="paperclip-btn">
+                <i class="fas fa-paperclip"></i>
+            </button>
+            <input type="search" id="message-input" placeholder="Type a message..." autocomplete="off"> <!-- Hidden -->
+            <button class="chat-btn" id="microphone-btn">
+                <i class="fas fa-microphone"></i>
+            </button>
+            <button class="chat-btn" id="send-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+    <script src="/static/scripts.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/static/recruiter/service-worker.js', {scope: '/recruiter/'})
+                .then(registration => {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(error => {
+                    console.error('Service Worker registration failed:', error);
+                });
+        }
+    </script>
+</body>
+</html>
