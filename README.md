@@ -1,7 +1,3 @@
-İşte projeniz için Türkçe bir `README.md` şablonu:
-
----
-
 # Proje Adı
 
 Bu proje bir RESTful API backend ile entegre edilmiş AI servisleri sunan bir uygulama içerir. Ayrıca, backend ile etkileşimde bulunan bir frontend de içerir ve bu sayede tam bir uygulama deneyimi sunar.
