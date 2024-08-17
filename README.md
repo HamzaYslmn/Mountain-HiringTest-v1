@@ -132,3 +132,5 @@ Bu proje lisanslanmıştır. Ayrıntılar için `LICENSE` dosyasına bakın.
 ---
 
 Bu şablon, projenize başlamanız ve katkıda bulunacak kişiler için gerekli tüm bilgileri sağlar.
+
+Başvuru Toplama: E-Posta Üzerinden (developer@mountain.com.tr)
