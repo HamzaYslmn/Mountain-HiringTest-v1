@@ -1,136 +1,103 @@
-# Hiring TEST
+# Mountain Hiring Test
 
-Bu proje bir RESTful API backend ile entegre edilmiş AI servisleri sunan bir uygulama içerir. Ayrıca, backend ile etkileşimde bulunan bir frontend de içerir ve bu sayede tam bir uygulama deneyimi sunar.
+Bu proje, işe alım sürecinde teknik yetkinliğinizi değerlendirmek için hazırlanmış bir test uygulamasıdır. Backend tarafında FastAPI ile geliştirilen RESTful AI servisleri ve bunlarla entegre çalışan bir frontend arayüzü içerir.
 
-## İçindekiler
+## Testin Amacı
+
+- AI tabanlı servislerin entegrasyonunu ve kullanımını göstermek
+- API ile etkileşimli, modern ve kullanıcı dostu bir frontend tasarlamak
+- Kod kalitesi, dokümantasyon ve teslimat disiplinini değerlendirmek
+
+## İçerik
 
 - [Kurulum](#kurulum)
-- [Backend](#backend)
-  - [API Dokümantasyonu](#api-dokümantasyonu)
-  - [Chatbot Servisi](#chatbot-servisi)
-  - [Vision Servisi](#vision-servisi)
-  - [TTS (Metin-Konuşma) Servisi](#tts-metin-konuşma-servisi)
-  - [STT (Konuşma-Metin) Servisi](#stt-konusma-metin-servisi)
-- [Frontend](#frontend)
-- [Kullanım](#kullanım)
-  - [Backend'i Çalıştırma](#backendi-çalıştırma)
-  - [Frontend'i Çalıştırma](#frontendi-çalıştırma)
-- [Katkıda Bulunma](#katkıda-bulunma)
+- [API Servisleri](#api-servisleri)
+- [Frontend Tasarım Görevi](#frontend-tasarım-görevi)
+- [Çalıştırma](#çalıştırma)
+- [Teslimat ve Katkı](#teslimat-ve-katkı)
 - [Lisans](#lisans)
 
 ## Kurulum
 
 ### Gereksinimler
 
-- [Python 3.11.9](https://www.python.org/downloads/release/python-3119/) (Kurulum sırasında "Add Python to PATH" seçeneğini işaretlemeyi unutmayın)
-- Frontend için gerekli olan ek yazılımlar (örneğin, Node.js)
+- Python 3.13 ([İndir](https://www.python.org/downloads/release/python-313/))
+- Node.js (Frontend için)
 
 ### Adımlar
 
-1. **Depoyu Klonlayın**
-
+1. Depoyu klonlayın:
    ```bash
    git clone https://github.com/HamzaYslmn/Mountain-HiringTest-v1.git
    ```
-
-2. **Python Bağımlılıklarını Yükleyin**
-
-   Proje dizininde requirements dosyasını bulun ve terminali açarak şu komutu çalıştırın:
-
+2. Python bağımlılıklarını yükleyin:
    ```bash
    pip install -r requirements.txt
    ```
 
-## Backend
+## API Servisleri
 
-Backend, FastAPI kullanılarak geliştirilmiştir ve çeşitli hizmetlerini RESTful API'ler aracılığıyla sunar.
+Tüm servisler FastAPI ile sunulmaktadır. Otomatik API dokümantasyonu için:
+- [Swagger UI](http://localhost:8001/docs)
+- [ReDoc](http://localhost:8001/redoc)
 
-### API Dokümantasyonu
+### Durum Kontrolü
+- **GET** `/status`
+- API'nin çalışıp çalışmadığını kontrol eder.
 
-Otomatik olarak oluşturulan API dokümantasyonuna şu adreslerden erişebilirsiniz:
+### Chat Servisi (Metin ve Görüntü)
+- **POST** `/chat`
+- JSON Parametreler:
+  - `message` (str): Kullanıcı mesajı
+  - `agent_id` (str, opsiyonel): AI ajan kimliği
+  - `photo` (str, opsiyonel): Base64 kodlu görsel veya görsel URL'si
+  - `response_id` (str, opsiyonel): Önceki yanıt kimliği
+- Not: Görüntü tabanlı sorgular için `photo` alanı kullanılabilir. Ayrı bir vision endpoint'i yoktur.
 
-- **DOCS**: [http://localhost:8000/docs](http://localhost:8000/docs)
-- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+### TTS (Text-to-Speech) Servisi
+- **POST** `/tts`
+- JSON Parametreler:
+  - `text` (str): Konuşmaya dönüştürülecek metin
+  - `thread_id` (str): Konu kimliği
+  - `assistant_id` (str): Asistan kimliği
+- Yanıt: WAV formatında ses dosyası (audio/wav)
 
-### Chatbot Servisi
+### STT (Speech-to-Text) Servisi
+- **POST** `/stt`
+- JSON Parametreler:
+  - `audio` (str): Base64 kodlu ses dosyası (WAV)
+  - `thread_id` (str): Konu kimliği
+  - `assistant_id` (str): Asistan kimliği
+- Yanıt: Çözümlenmiş metin
 
-Chatbot servisi, metin tabanlı girdileri işler ve AI destekli yanıtlar sağlar.
+## Frontend Tasarım Görevi
 
-- **Endpoint**: `/chatbot/`
-- **Method**: POST
-- **Parametreler**:
-  - `userinput` (str): Kullanıcıdan gelen metin girdisi. (Örneğin: "Merhaba!")
-  - `thread_id` (str): Mevcut konuşma dizisinin kimliği. (Örneğin:"thread_123")
-  - `assistant_id` (str): Asistan kimliği. (Örneğin: "asst_123")
-  - `username` (str): Kullanıcı adı. (Örneğin: "John Doe")
+- Chat arayüzü için örnek ekranı geliştirmeniz beklenmektedir.
+- Claude, Gemini, ChatGPT gibi modern AI arayüzlerinden ilham alarak, daha iyi ve kullanıcı dostu bir tasarım sunun.
+- Figma veya tercih ettiğiniz bir araçla tasarımınızı oluşturun.
+- Teslimatta Figma linki veya tasarım dosyasını ekleyin.
 
-### Vision Servisi
+## Çalıştırma
 
-Bu servis, görüntüleri işler ve ilgili bir yanıt sunar.
-
-- **Endpoint**: `/vision/`
-- **Method**: POST
-- **Parametreler**:
-  - `userinput` (str): Görüntü için ek bağlam veya sorgu.
-  - `thread_id` (str): Mevcut konuşma dizisinin kimliği.
-  - `assistant_id` (str): Asistan kimliği.
-  - `image_file` (UploadFile): İşlenecek görüntü dosyası. (JPEG, PNG)
-
-### TTS (Metin-Konuşma) Servisi
-
-Metin girdisini konuşma sesine dönüştürür.
-
-- **Endpoint**: `/tts/`
-- **Method**: POST
-- **Parametreler**:
-  - `user_input` (str): Konuşmaya dönüştürülecek metin.
-
-### STT (Konuşma-Metin) Servisi
-
-Konuşma sesini metne dönüştürür.
-
-- **Endpoint**: `/stt/`
-- **Method**: POST
-- **Parametreler**:
-  - `thread_id` (str): Mevcut konuşma dizisinin kimliği.
-  - `assistant_id` (str): Asistan kimliği.
-  - `audio_file` (UploadFile): Yazıya dökülecek ses dosyası. (bu uygulama için WAV)
-
-## Frontend
-
-### Örnek Ekran Tasarımı
-
-Frontend kısmı için daha iyi bir ekran tasarımı yapman bekleniyor. Claude, Gemini, ChatGPT ekranlarından ilham alarak, [http://localhost:8000/HR](http://localhost:8000/HR) adresindeki örnek ekranı geliştirin.
-
-- **Kullanılacak Araç**: Figma (veya tercih ettiğiniz başka bir tasarım aracı)
-- **Hedef**: Sağlanan örneklerden daha iyi gözüken, kullanıcı dostu ve görsel olarak çekici bir arayüz tasarlayın.
-
-## Kullanım
-
-### Backend'i Çalıştırma
-
-Backend sunucusunu başlatmak için şu komutu çalıştırın:
-
+### Backend
 ```bash
 python xMain.py
 ```
+Sunucu: [http://localhost:8001](http://localhost:8001)
 
-Backend, `http://localhost:8000` adresinde çalışacaktır.
+### Frontend
+Frontend framework'ünüze göre uygun komutları kullanın (örn. `npm start`).
 
-### Frontend'i Çalıştırma
+## Teslimat ve Katkı
 
-Frontend framework'ünüze göre gerekli talimatları izleyin. Genellikle bir frontend sunucusunu başlatmak için şu komutları kullanabilirsiniz:
-
-```bash
-npm start
-```
+- Kodunuzu ve tasarımınızı paylaşın.
+- Açık ve anlaşılır bir şekilde dokümante edin.
+- Sorularınız için: developer@mountain.com.tr
 
 ## Lisans
 
-Bu proje lisanslanmıştır. Ayrıntılar için `LICENSE` dosyasına bakın.
+Detaylar için `LICENSE` dosyasına bakın.
 
 ---
 
-Bu şablon, projenize başlamanız ve katkıda bulunacak kişiler için gerekli tüm bilgileri sağlar.
-
-Başvuru Toplama: E-Posta Üzerinden (developer@mountain.com.tr)
+Başarılar!
