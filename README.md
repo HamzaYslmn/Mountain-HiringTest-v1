@@ -1,19 +1,26 @@
 ## 🚀 Proje Özeti
 
-Mountain Hiring Test, FastAPI tabanlı bir REST API ile Chat ↔ Vision ↔ TTS/STT gibi yapay zeka servislerini birleştirir.
+Mountain Hiring Test, FastAPI tabanlı bir REST API ile Chat ↔ Görüntü ↔ TTS/STT gibi yapay zeka servislerini bir araya getirir.
 
-* **Backend**: Python 3.11+, yüksek performanslı FastAPI, akışlı (`StreamingResponse`) yanıtlar.([fastapi.tiangolo.com][1])
-* **Middleware**: Basit “Authorization” başlığıyla JWT benzeri “uuid” doğrulaması.([GitHub][2])
-* **Frontend**: React/Next 14 önerilir; akışlı JSON parçalarını gerçek-zamanlı işleyerek sohbet arayüzü sunar.
-* **Test Otomasyonu**: `BackEnd/AI/test/test.py` senaryosu ile tüm uç-noktalar uçtan uca denetlenir.([GitHub][3])
+- **Backend**: Python 3.11+, yüksek performanslı FastAPI, akışlı (`StreamingResponse`) yanıtlar ([fastapi.tiangolo.com][1]).
+- **Middleware**: Basit “Authorization” başlığı ile JWT benzeri “uuid” doğrulaması ([GitHub][2]).
+- **Frontend**: React/Next 14 önerilir; akışlı JSON parçalarını gerçek zamanlı işleyerek sohbet arayüzü sunar.
+- **Test Otomasyonu**: `BackEnd/AI/test/test.py` ile tüm uç noktalar uçtan uca test edilir ([GitHub][3]).
 
 ---
+
+## Frontend Tasarım Görevi
+
+- Chat arayüzü için örnek bir ekran tasarlayın.
+- Claude, Gemini, ChatGPT gibi modern AI arayüzlerinden ilham alın; kullanıcı dostu ve yenilikçi bir tasarım sunun.
+- Figma veya tercih ettiğiniz bir araçla tasarımınızı oluşturun.
+- Teslimde Figma linki veya tasarım dosyasını ekleyin.
 
 ## İçindekiler
 
 1. [Kurulum](#kurulum)
 2. [Mimari](#mimari)
-3. [Ortamdaki Değişkenler](#ortam-değişkenleri)
+3. [Ortam Değişkenleri](#ortam-değişkenleri)
 4. [API Referansı](#api-referansı)
 5. [Örnek İstekler](#örnek-istekler)
 6. [Frontend Gereksinimleri](#frontend-gereksinimleri)
@@ -28,11 +35,11 @@ Mountain Hiring Test, FastAPI tabanlı bir REST API ile Chat ↔ Vision ↔ TTS/
 
 | Katman    | Sürüm    | Not                                                  |
 | --------- | -------- | ---------------------------------------------------- |
-| Python    | 3.11.x   | “Add to PATH” işaretli kurulum                       |
-| Node.js   | ≥ 20 LTS | Vite veya Next 14 SSR için gereklidir ([Node.js][4]) |
+| Python    | 3.13.x   | “Add to PATH” seçili olmalı                          |
+| Node.js   | ≥ 22 LTS | Vite veya Next 14 SSR için gereklidir ([Node.js][4]) |
 | pip / npm | Güncel   |                                                      |
 
-### 2. Depoyu Çek ve Yükle
+### 2. Depoyu Klonlayın ve Yükleyin
 
 ```bash
 git clone https://github.com/HamzaYslmn/Mountain-HiringTest-v1.git
@@ -41,14 +48,14 @@ pip install -r requirements.txt
 npm i        # frontend dizininde (isteğe bağlı)
 ```
 
-### 3. Server’ı Çalıştır
+### 3. Sunucuyu Başlatın
 
 ```bash
 # kök dizinde
 uvicorn BackEnd.AI.xMain:app --host 0.0.0.0 --port 8001 --reload
 ```
 
-`BASE_URL` testlerde olduğu gibi `http://localhost:8001/AI`’dir. ([GitHub][3])
+Testlerde olduğu gibi `BASE_URL` `http://localhost:8001/AI` olmalıdır ([GitHub][3]).
 
 ---
 
@@ -65,7 +72,7 @@ uvicorn BackEnd.AI.xMain:app --host 0.0.0.0 --port 8001 --reload
                                     └──────────────────────────────────────┘
 ```
 
-FastAPI’nin otomatik Swagger & ReDoc arayüzleri `/docs` ve `/redoc` altındadır.([fastapi.tiangolo.com][5])
+FastAPI’nin otomatik Swagger & ReDoc arayüzleri `/docs` ve `/redoc` altındadır ([fastapi.tiangolo.com][5]).
 
 ---
 
@@ -83,13 +90,13 @@ FastAPI’nin otomatik Swagger & ReDoc arayüzleri `/docs` ve `/redoc` altındad
 
 ### Yetkilendirme
 
-Her isteğe
+Her isteğe şu başlık eklenmelidir:
 
 ```http
 Authorization: <uuid|token>
 ```
 
-başlığı eklenmelidir; aksi hâlde `uuid = "public"` atanır ve 401 dönülür.([GitHub][2])
+Başlık eklenmezse `uuid = "public"` atanır ve 401 döner ([GitHub][2]).
 
 ### 1. GET `/AI/status`
 
@@ -110,10 +117,10 @@ Basit sağlık kontrolü. Örnek çıktı:
 | ------------- | ------ | ------- | ---------------------------------- |
 | `message`     | string | ✅       | Kullanıcı mesajı                   |
 | `agent_id`    | string | ❌       | Prompt/agent anahtarı              |
-| `photo`       | string | ❌       | `data:image/...;base64,` ya da URL |
+| `photo`       | string | ❌       | `data:image/...;base64,` veya URL  |
 | `response_id` | string | ❌       | Önceki cevapla devam               |
 
-Yanıt **chunk**-chunk (`3 byte`) olarak akan `application/json` tipinde bir akıştır.([GitHub][7])
+Yanıt, **3 baytlık** JSON parçaları olarak akış şeklinde döner ([GitHub][7]).
 
 Örnek nihai JSON:
 
@@ -132,8 +139,8 @@ Yanıt **chunk**-chunk (`3 byte`) olarak akan `application/json` tipinde bir ak�
 | `thread_id`    | str | Konuşma dizisi |
 | `assistant_id` | str | Asistan ID     |
 
-İşte, Google Speech üzerinden transkripsiyon döner.([GitHub][8])
-`SpeechRecognition` PyPI paketi kullanılır.([PyPI][9])
+Google Speech üzerinden transkripsiyon döner ([GitHub][8]).
+`SpeechRecognition` PyPI paketi kullanılır ([PyPI][9]).
 
 ### 4. POST `/AI/openai/tts` – Text → Speech
 
@@ -143,7 +150,7 @@ Yanıt **chunk**-chunk (`3 byte`) olarak akan `application/json` tipinde bir ak�
 | `thread_id`    | str | …              |
 | `assistant_id` | str | …              |
 
-`pyttsx3` ile offline WAV akışı döner.([GitHub][10], [PyPI][11])
+`pyttsx3` ile offline WAV akışı döner ([GitHub][10], [PyPI][11]).
 
 ---
 
@@ -155,8 +162,6 @@ curl -N -X POST http://localhost:8001/AI/openai/chat \
  -d '{"message":"Merhaba!", "agent_id":"pmpt_...", "photo":null}'
 ```
 
-Akışı satır satır izlemek için `--no-buffer` (`-N`) parametresine dikkat edin.
-
 ---
 
 ## Frontend Gereksinimleri
@@ -166,12 +171,9 @@ Akışı satır satır izlemek için `--no-buffer` (`-N`) parametresine dikkat e
 | Katman         | Öneri                      |
 | -------------- | -------------------------- |
 | UI Framework   | React 18 + Next.js 14      |
-| Durum Yönetimi | Zustand / Redux Toolkit    |
 | Tasarım        | Figma dosyası ⇒ Components |
-| Akış İşleme    | Fetch + ReadableStream API |
-| Ses            | Web Speech API veya Howler |
-
-> **Akış Sökümü**:  `ReadableStreamDefaultReader` ile 3-bayt parçalardan `TextDecoder().decode(chunk)` yapın ve JSON biriktirin.
+| UI Kit         | Tailwind CSS               |
+| Build Aracı    | Vite                        |
 
 ---
 
@@ -181,16 +183,16 @@ Akışı satır satır izlemek için `--no-buffer` (`-N`) parametresine dikkat e
 python BackEnd/AI/test/test.py
 ```
 
-Betik; `/status`, `/chat`, `/chat+image`, `/stt`, `/tts` uç-noktalarını sırayla çağırır ve hataları raporlar.([GitHub][3])
-`httpx.AsyncClient` ile yazılmıştır; FastAPI’nin resmi test kılavuzuyla uyumludur.([fastapi.tiangolo.com][12])
+Betik; `/status`, `/chat`, `/stt`, `/tts` uç noktalarını sırayla çağırır ve hataları raporlar ([GitHub][3]).
+`httpx.AsyncClient` ile yazılmıştır; FastAPI’nin resmi test kılavuzuyla uyumludur ([fastapi.tiangolo.com][12]).
 
 ---
 
 ## Katkı
 
-1. Fork & PR açın.
+1. Forklayın ve PR açın.
 2. Her yeni rota için **docstring**, örnek istek ve pytest ekleyin.
-3. `pre-commit` → black + isort.
+3. `pre-commit` → black + isort kullanın.
 
 ---
 
@@ -198,17 +200,16 @@ Betik; `/status`, `/chat`, `/chat+image`, `/stt`, `/tts` uç-noktalarını sıra
 
 [Lisans](https://github.com/HamzaYslmn/Mountain-HiringTest-v1/blob/main/LICENSE)
 
-
 ---
 
 ### Kaynakça
 
-* FastAPI resmi dokümantasyonu([fastapi.tiangolo.com][1])
-* FastAPI Tutorial & Testing([fastapi.tiangolo.com][5], [fastapi.tiangolo.com][12])
-* Repository kaynak kodu (routelar)([GitHub][7], [GitHub][8], [GitHub][10], [GitHub][6], [GitHub][2], [GitHub][3])
-* SpeechRecognition PyPI sayfası([PyPI][9])
-* pyttsx3 PyPI sayfası([PyPI][11])
-* Node.js resmi sitesi([Node.js][4])
+* FastAPI resmi dokümantasyonu ([fastapi.tiangolo.com][1])
+* FastAPI Tutorial & Testing ([fastapi.tiangolo.com][5], [fastapi.tiangolo.com][12])
+* Repository kaynak kodu ([GitHub][7], [GitHub][8], [GitHub][10], [GitHub][6], [GitHub][2], [GitHub][3])
+* SpeechRecognition PyPI sayfası ([PyPI][9])
+* pyttsx3 PyPI sayfası ([PyPI][11])
+* Node.js resmi sitesi ([Node.js][4])
 
 [1]: https://fastapi.tiangolo.com/?utm_source=chatgpt.com "FastAPI"
 [2]: https://raw.githubusercontent.com/HamzaYslmn/Mountain-HiringTest-v1/main/BackEnd/AI/middleware/middleware.py "raw.githubusercontent.com"
