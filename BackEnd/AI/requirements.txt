@@ -1,0 +1,12 @@
+fastapi[standard]
+uvicorn[standard]
+python-dotenv
+openai
+httpx
+aiohttp
+aiofiles
+google-genai
+PyJWT
+
+SpeechRecognition
+pyttsx3
